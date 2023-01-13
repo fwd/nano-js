@@ -12,7 +12,7 @@
         })
     }
 
-    if (window.someVar === undefined) {
+    if (window.nano === undefined) {
         window.nano = {}
     }
 
@@ -27,7 +27,7 @@
         })
     }
 
-    window.nano.ppv = (element, amount, config) => {
+    window.nano.ppv = (config) => {
 
         if (typeof config === 'string' && config.includes('nano_')) {
             config = { address: config }
@@ -35,14 +35,14 @@
             config = config || {}
         }
 
-        if (!window.nano.address && !config.address) return console.error('Nano: NANO payment address missing:', element)
+        // if (!window.nano.address && !config.address) return console.error('Nano: NANO payment address missing:', config.element)
 
-        if (config.address && !config.address.includes('nano_')) return console.error('Nano: NANO payment address invalid:', element)
+        if (!config.address || !config.address.includes('nano_')) return console.error('Nano: NANO payment address invalid:', config.element)
 
-        if (!element) return console.error('Nano: No premium element provided:', element)
-        if (!amount) return console.error('Nano: No price provided:', element)
+        if (!config.element) return console.error('Nano: No premium element provided:', config.element)
+        if (!config.amount) return console.error('Nano: No price provided:', config.element)
         
-        var all = document.querySelectorAll(element);
+        var all = document.querySelectorAll(config.element);
 
         for (var i=0, max=all.length; i < max; i++) {
             
@@ -53,9 +53,9 @@
             
             let code = `<div id="nano-locked" style="position: absolute;background:${config.background || '#000'};width: 100%;height: 100%;top: 0;left: 0;bottom: 0;right: 0;font-size: 20px;min-height: 110px;display: flex;align-items: center;flex-direction: column;justify-content: center; color: ${config.color || '#FFF'}">
     <div>
-        Unlock for ${amount} NANO.
+        Unlock for ${config.amount} NANO.
     </div>
-    <div onclick="window.nano.unlock('${element}', '${amount}', '${config.address}')" style=" cursor: pointer; padding: 5px 20px; border-radius: 15px; background: #FFF; margin: 10px 0; color: ${config.color || '#000'}">
+    <div onclick="window.nano.unlock('${config.element}', '${config.amount}', '${config.address}')" style=" cursor: pointer; padding: 5px 20px; border-radius: 15px; background: #FFF; margin: 10px 0; color: ${config.color || '#000'}">
         Unlock
     </div>
 </div>`
